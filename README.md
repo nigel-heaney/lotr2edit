@@ -3,9 +3,27 @@ Lords of the Realm II - Game file editor
 
 ![screenshot1](lotr2_edit.png)
 
-A game file editor which is written in python.  This program will allow you to edit Gold, Stone, Wood, Iron and weapons (Armor, Swords, Bows and crossbows).
+A game file editor that is written in python.  This program will allow you to edit Gold, Stone, Wood, Iron and weapons (Armor, Swords, Bows and crossbows).
+
+Many years ago I wrote the same thing in Turbo Pascal and would even allow you to edit individual counties but I lost the source for this and so wrote it again in Python.
 
 This program is tested on Linux and Windows.
+
+
+Usage
+=====
+
+**python lotr2edit.py -h**
+Will show the help page
+
+**python lotr2edit.py -l <gamfile.sav>**
+Will list the current values of the savegame file.
+
+**python lotr2edit.py -e <gamfile.sav>**
+Will allow you to edit the savegame file and update various values.
+
+**python lotr2edit.py -s <gamfile.sav>**
+This option will just set the savegame file to good defaults so no editing is required.
 
 
 License
