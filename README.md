@@ -13,6 +13,7 @@ This program is tested on Linux and Windows.
 Usage
 =====
 
+'''
 ./lotr2edit.py -h
 
 Lords of the Realm II - Game File Editor
@@ -22,7 +23,7 @@ Lords of the Realm II - Game File Editor
  -l | --list <file>          Display current values of game file
  -e | --edit <file>          Edit current values of game file
  -s | --set <file>           Update game file with defaults
-
+'''
 
 
 License
