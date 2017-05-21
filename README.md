@@ -13,17 +13,16 @@ This program is tested on Linux and Windows.
 Usage
 =====
 
-**python lotr2edit.py -h**
-Will show the help page
+./lotr2edit.py -h
 
-**python lotr2edit.py -l <gamfile.sav>**
-Will list the current values of the savegame file.
+Lords of the Realm II - Game File Editor
+----------------------------------------
 
-**python lotr2edit.py -e <gamfile.sav>**
-Will allow you to edit the savegame file and update various values.
+ -h | --help                 Show this help
+ -l | --list <file>          Display current values of game file
+ -e | --edit <file>          Edit current values of game file
+ -s | --set <file>           Update game file with defaults
 
-**python lotr2edit.py -s <gamfile.sav>**
-This option will just set the savegame file to good defaults so no editing is required.
 
 
 License
