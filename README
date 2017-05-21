@@ -1,6 +1,6 @@
 Lords of the Realm II - Game file editor
 ========================================
-[alt tag](lotr2_edit.png)
+[screenshot1](lotr2_edit.png)
 
 A game file editor which is written in python.  This program will allow you to edit Gold, Stone, Wood, Iron and weapons (Armor, Swords, Bows and crossbows).
 
