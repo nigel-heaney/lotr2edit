@@ -1,0 +1,79 @@
+Start of counties = 15449  (2nd 15749) (767 Bytes
+End = 16f30?
+
+County=767 Bytes
+{
+
+
+Bytes  	Purpose
+0-4		Ignored
+5		Lord (0=none, 1 is me, 2 is bishop, 3 is Baron 4 is countess,5 is Knight)
+6 		Ignored
+7		0=none,1=Red,2=Yellow,3=Grey,4=Pink,5=Blue,6=Black
+8		Ignored
+9		Health (8bit,1 plague,2 weak,3 normal,4 perfect)
+10-11	Ignored
+12		Happyness (0-100)
+13		Happyness last season (0-100)
+14-23	Ignored
+24-35	Ignored
+36-37	Population
+38-39	Ignored
+40-535	Ignored
+536-547 Ignored
+548-549	Grain Store
+550-551 Ignored
+552-583 Ignored
+584-591	Ignored
+592-593	Cattle
+594-595 Ignored
+596		Tax
+597-599 Ignored
+600-768 Ignored
+
+}
+
+
+Avery
+336   -> 50 01 = 1546c
+989   -> DD 03 = 1566c
+tax            = 15501
+
+Grogg
+county owner: 1664f
+county owner: 1664d
+331     -> 4b 01 = 1666c
+109 gr  -> 6d 00 = 1686c
+21 cows -> 15 00 = 16898
+14% tax -> 0e 00 ? 1689c
+
+Frozia
+100H  -> 64    = 16354  (signed 8bit)
+Hlastseason    = 16355
+1623  -> 57 06 = 1636c
+2880  -> 40 0b = 1656c (Grain)
+ealth
+Eckles
+1700    -> A4 06 = 1606C
+2526 Gr -> DE 09 = 1626c
+
+Dare
+2167    -> 07 87 = 15d6c
+2177 Gr -> 81 08 = 15f6c
+
+Carefield
+1604    -> 44 06 = 15a6c
+442 Gr  -> Ba 01 = 15c6c
+
+Bloom County
+healthiness    = 15751  (8bit, 1 plague, 2 weak, 3 normal,4 perfect)
+1397  -> 75 05 = 1576c
+1561  -> 19 06 = 1596c
+
+Heckle
+1304  -> 18 05 = 1696c
+2771  -> D3 0A = 16B6c
+
+Intersect 
+1533  -> FD 05 = 16c6c
+4161  -> 41 10 = 16e6c
