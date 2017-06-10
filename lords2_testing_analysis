@@ -1,36 +1,32 @@
-Start of counties = 15449  (2nd 15749) (767 Bytes
+Start of counties = 15449  (2nd 15749) (768 Bytes
 End = 16f30?
 
 County=767 Bytes
 {
-
-
-Bytes  	Purpose
-0-4		Ignored
-5		Lord (0=none, 1 is me, 2 is bishop, 3 is Baron 4 is countess,5 is Knight)
-6 		Ignored
-7		0=none,1=Red,2=Yellow,3=Grey,4=Pink,5=Blue,6=Black
-8		Ignored
-9		Health (8bit,1 plague,2 weak,3 normal,4 perfect)
-10-11	Ignored
-12		Happyness (0-100)
-13		Happyness last season (0-100)
-14-23	Ignored
-24-35	Ignored
-36-37	Population
-38-39	Ignored
-40-535	Ignored
-536-547 Ignored
-548-549	Grain Store
-550-551 Ignored
-552-583 Ignored
-584-591	Ignored
-592-593	Cattle
-594-595 Ignored
-596		Tax
-597-599 Ignored
-600-768 Ignored
-
+	Bytes  	Purpose
+4	1-4		Ignored
+1	5		Lord (0=none, 1 is me, 2 is bishop, 3 is Baron 4 is countess,5 is Knight)
+1	6 		Ignored
+1	7		0=none,1=Red,2=Yellow,3=Grey,4=Pink,5=Blue,6=Black
+1	8		Ignored
+1	9		Health (8bit,1 plague,2 weak,3 normal,4 perfect)
+2	10-11	Ignored
+1	12		Happyness (0-100)
+1	13		Happyness last season (0-100)
+3	14-16	Ignored
+1   17		End
+6   18-23	Ignored
+12	24-35	Ignored
+2	36-37	Population
+2	38-39	Ignored
+145	40-184	Ignored
+1	185		Tax
+362	186-547 Ignored 347+14
+2	548-549	Grain Store
+42	550-591 Ignored
+2	592-593	Cattle
+6	594-599 Ignored
+168	600-768 Ignored
 }
 
 
