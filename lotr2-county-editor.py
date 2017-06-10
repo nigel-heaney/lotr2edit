@@ -1,53 +1,6 @@
 #!/usr/bin/env python
 # Program to edit county information for LOTR2 Save files
-# Nigel Heaney - 20120310
-
-
-# My Lord, county 1/9 reports the following:
-
-# Ruler: You M'Lord
-# Tax: 7
-# Happiness: 100
-# Health: Good
-# Population: 1397
-# Grain: 1561
-# Cattle: 0
-# (E)dit, (N)ext, (P)revious, (Q)uit: e
-
-# My Lord, What do you desire for county 1/9?
-
-# Ruler 0=None, 1=You, 2=Bishop, 3=Baron, 4=Countess,5=Knight:1
-# Happiness 0-100:57
-# Health 1=Plagued, 2=Weak, 3=Normal, 4=Perfect:4
-# Population 0-65535:1234
-# Grain 0-65535:1234
-# Cattle 0-65535:1234
-# Ruler: You M'Lord
-# Tax: 7
-# Happiness: 57
-
-
-# print "Ruler: ",
-# be.cprint(self.colors[self.county_color], "{0:}\n".format(self.rulers[self.county_ruler]))
-# be.reset_colour()
-# print "Tax: ",
-# be.cprint("blue", "{0:}\n".format(self.county_tax))
-# be.reset_colour()      
-# print "Happiness: ",
-# be.cprint("red", "{0:}\n".format(self.county_happiness))
-# be.reset_colour()
-# print "Health: ",
-# be.cprint(self.healthc[self.county_health], "{0:}\n".format(self.health[self.county_health]))
-# be.reset_colour()
-# print "Population: ",
-# be.cprint("white", "{0:}\n".format(self.county_population))
-# be.reset_colour()            
-# print "Grain: ",
-# be.cprint("yellow", "{0:}\n".format(self.county_grain))
-# be.reset_colour()      
-# print "Cattle: ",
-# be.cprint("white", "{0:}\n".format(self.county_cattle))
-# be.reset_colour()
+# Nigel Heaney - 20150118
 
 import sys
 import os
@@ -61,194 +14,200 @@ debug=0
 
 class lotr2edit():
     def __init__(self):
-        '''initialise with some details which set will use
+        '''initialise class with defaults/basic information
         '''
-        self.gf_gold=100000000
-        self.gf_gold_addr=0x14B80
-        self.gf_iron=60000
-        self.gf_iron_addr=0x14B88
-        self.gf_stone=60000
-        self.gf_stone_addr=0x14B90
-        self.gf_wood=60000
-        self.gf_wood_addr=0x14B98
-        #Im not interested in all weapons because Knights are the bomb! when cheating :)
-        self.gf_armor=9000
-        self.gf_armor_addr=0x14BBC
-        self.gf_bows=9000
-        self.gf_bows_addr=0x14BB8
-        self.gf_xbows=9000
-        self.gf_xbows_addr=0x14BA8
-        self.gf_swords=9000
-        self.gf_swords_addr=0x14BB0
+        self.gf=""
+        self.county=0
+        self.counties=0
+        self.county_ruler=0
+        self.county_color=0
+        self.county_health=0
+        self.county_happiness=0
+        self.county_end=0
+        self.county_population=0
+        self.county_tax=0
+        self.county_grain=0
+        self.county_cattle=0
 
+        self.colors=["lgrey","Red","Yellow","Grey","Purple","Blue","White"]
+        self.health=["Null","Plagued","Weak","Good","Perfect"]
+        self.healthc=["Null","Red","yellow","green","lgreen"]
+        self.rulers=["No Ruler", "You M'Lord", "The Bishop", "The Baron", "The Countess", "The Knight"]
+        self.start=0x15449
 
 
     def usage(self):
-        be.cprint("green","\nLords of the Realm II - Game File Editor\n")
-        be.cprint("grey","----------------------------------------\n\n")
+        be.cprint("green","\nLords of the Realm II - County Game File Editor\n")
+        be.cprint("grey","-----------------------------------------------\n\n")
         be.reset_colour()
-        print " -h | --help             Show this help"
-        print " -l | --list <file>          Display current values of game file"
-        print " -e | --edit <file>          Edit current values of game file"
-        print " -s | --set <file>           Update game file with defaults"
+        print " -h | --help                 Show this help"
+        print " -f | --file <file>          Display current values of game file"
 
-    def loadvalues(self,filename):
+    def loadCounty(self,cnum):
         '''load values from file'''
-        if os.path.isfile(filename):
-            self.gf=open(filename,"rb")
-            #Gold
-            self.gf.seek(self.gf_gold_addr)
-            self.gf_gold=struct.unpack('I', self.gf.read(4))[0]
-            #Resources
-            self.gf.seek(self.gf_iron_addr)
-            self.gf_iron=struct.unpack('H', self.gf.read(2))[0]
-            self.gf.seek(self.gf_stone_addr)
-            self.gf_stone=struct.unpack('H', self.gf.read(2))[0]
-            self.gf.seek(self.gf_wood_addr)
-            self.gf_wood=struct.unpack('H', self.gf.read(2))[0]
-            #Weapons
-            self.gf.seek(self.gf_armor_addr)
-            self.gf_armor=struct.unpack('H', self.gf.read(2))[0]
-            self.gf.seek(self.gf_bows_addr)
-            self.gf_bows=struct.unpack('H', self.gf.read(2))[0]
-            self.gf.seek(self.gf_xbows_addr)
-            self.gf_xbows=struct.unpack('H', self.gf.read(2))[0]
-            self.gf.seek(self.gf_swords_addr)
-            self.gf_swords=struct.unpack('H', self.gf.read(2))[0]
-            self.gf.close()
-        else:
-            be.cprint("red","ERROR: Cannot open game file!")
-            sys.exit(1)
+        self.gf.seek(self.start + (768 * cnum) + 4)
+        self.county_ruler=struct.unpack('B', self.gf.read(1))[0]
+        self.gf.seek(self.start + (768 * cnum) + 6)
+        self.county_color=struct.unpack('B', self.gf.read(1))[0]
+        self.gf.seek(self.start + (768 * cnum) + 8)
+        self.county_health=struct.unpack('B', self.gf.read(1))[0]
+        self.gf.seek(self.start + (768 * cnum) + 11)
+        self.county_happiness=struct.unpack('B', self.gf.read(1))[0]
+        self.gf.seek(self.start + (768 * cnum) + 35)
+        self.county_population=struct.unpack('H', self.gf.read(2))[0]
+        self.gf.seek(self.start + (768 * cnum) + 184)
+        self.county_tax=struct.unpack('B', self.gf.read(1))[0]
+        self.gf.seek(self.start + (768 * cnum) + 547)
+        self.county_grain=struct.unpack('H', self.gf.read(2))[0]
+        self.gf.seek(self.start + (768 * cnum) + 591)
+        self.county_cattle=struct.unpack('H', self.gf.read(2))[0]
 
-    def savevalues(self, filename):
-        '''save values from file'''
-        if os.path.isfile(filename):
-            self.gf=open(filename, 'rb+')
-            #Gold
-            self.gf.seek(self.gf_gold_addr)
-            self.gf.write(struct.pack('I', self.gf_gold))
-            #Resources
-            self.gf.seek(self.gf_iron_addr)
-            self.gf.write(struct.pack('H',self.gf_iron))
-            self.gf.seek(self.gf_stone_addr)
-            self.gf.write(struct.pack('H',self.gf_stone))
-            self.gf.seek(self.gf_wood_addr)
-            self.gf.write(struct.pack('H',self.gf_wood))
-            #Weapons
-            self.gf.seek(self.gf_armor_addr)
-            self.gf.write(struct.pack('H',self.gf_armor))
-            self.gf.seek(self.gf_bows_addr)
-            self.gf.write(struct.pack('H',self.gf_bows))
-            self.gf.seek(self.gf_xbows_addr)
-            self.gf.write(struct.pack('H',self.gf_xbows))
-            self.gf.seek(self.gf_swords_addr)
-            self.gf.write(struct.pack('H',self.gf_swords))
-            self.gf.close()
-        else:
-            be.cprint("red","ERROR: Cannot open game file!")
-            sys.exit(1)
+    def saveCounty(self, cnum):
+        '''save county to file'''
+        self.gf.seek(self.start + (768 * cnum) + 4)
+        self.gf.write(struct.pack('B', self.county_ruler))
+
+        self.gf.seek(self.start + (768 * cnum) + 6)
+        self.gf.write(struct.pack('B', self.county_color))
+
+        self.gf.seek(self.start + (768 * cnum) + 8)
+        self.gf.write(struct.pack('B', self.county_health))
+
+        self.gf.seek(self.start + (768 * cnum) + 11)
+        self.gf.write(struct.pack('B', self.county_happiness))
+
+        self.gf.seek(self.start + (768 * cnum) + 35)
+        self.gf.write(struct.pack('H', self.county_population))
+
+        self.gf.seek(self.start + (768 * cnum) + 547)
+        self.gf.write(struct.pack('H', self.county_grain))
+
+        self.gf.seek(self.start + (768 * cnum) + 591)
+        self.gf.write(struct.pack('H', self.county_cattle))
 
             
-    def listfile(self, filename):
-        #validate file exists
-        self.loadvalues(filename)
-        be.cprint("green", "My Lord, the treasury reports the following:\n\n")
-        be.reset_colour()
-        print "     Gold: ",
-        be.set_colour("yellow")
-        print "{0:,}".format(self.gf_gold)
-        be.reset_colour()
-        print "     Iron: ",
-        be.set_colour("brown")
-        print "{0:,}".format(self.gf_iron)
-        be.reset_colour()
-        print "    Stone: ",
-        be.set_colour("grey")
-        print "{0:,}".format(self.gf_stone)
-        be.reset_colour()
-        print "     Wood: ",
-        be.set_colour("green")
-        print "{0:,}".format(self.gf_wood)
-        be.reset_colour()
-        print "    Armor: ",
-        be.set_colour("red")
-        print "{0:,}".format(self.gf_armor)
-        be.reset_colour()
-        print "     Bows: ",
-        be.set_colour("red")
-        print "{0:,}".format(self.gf_bows)
-        be.reset_colour()
-        print "Crossbows: ",
-        be.set_colour("red")
-        print "{0:,}".format(self.gf_xbows)
-        be.reset_colour()
-        print "   Swords: ",
-        be.set_colour("red")
-        print "{0:,}".format(self.gf_swords)
-        be.reset_colour()
-        
-    def editfile(self, filename):
-        self.loadvalues(filename)
-        be.cprint("green", "My Lord, Please supply your desired values:\n\n")
-        be.reset_colour()
-        #Gold
-        print "{0:11}{1:10}({2:,})".format("     Gold: ", " ", self.gf_gold),
-        print "\r     Gold: ".format(self.gf_gold),
-        be.set_colour("yellow")
-        self.gf_gold=int(raw_input())
-        be.reset_colour()
+    def listCounties(self):
+        count=1
+        while True:
+            be.cprint("green", "\nMy Lord, county {0}/{1} reports the following:\n\n".format(count, self.counties))
+            be.reset_colour()
+            self.loadCounty(count-1)
+            print "Ruler: ",
+            be.cprint(self.colors[self.county_color], "{0:}\n".format(self.rulers[self.county_ruler]))
+            be.reset_colour()
+            print "Tax: ",
+            be.cprint("blue", "{0:}\n".format(self.county_tax))
+            be.reset_colour()      
+            print "Happiness: ",
+            be.cprint("red", "{0:}\n".format(self.county_happiness))
+            be.reset_colour()
+            print "Health: ",
+            be.cprint(self.healthc[self.county_health], "{0:}\n".format(self.health[self.county_health]))
+            be.reset_colour()
+            print "Population: ",
+            be.cprint("white", "{0:}\n".format(self.county_population))
+            be.reset_colour()            
+            print "Grain: ",
+            be.cprint("yellow", "{0:}\n".format(self.county_grain))
+            be.reset_colour()      
+            print "Cattle: ",
+            be.cprint("white", "{0:}\n".format(self.county_cattle))
+            be.reset_colour()
 
-        #Resources
-        print "{0:11}{1:10}({2:,}/65535)".format("     Iron: ", " ", self.gf_iron),
-        print "\r     Iron: ".format(self.gf_iron),
-        be.set_colour("brown")
-        self.gf_iron=int(raw_input(''))
-        be.reset_colour()
+            be.cprint("grey", "(P)revious - (E)dit - (Q)uit - (N)ext: ")
+            temp=raw_input("")
+            if temp.lower() == 'p':
+                count-=1
+                if count < 1: count=1
+            if temp.lower() == 'n':
+                count+=1
+                if count > self.counties: count=self.counties
+            if temp.lower() == 'q':
+                be.cprint("green", "\nBye!\n")
+                sys.exit(0)
+            if temp.lower() == 'e':
+                self.editCounty(count)
 
-        print "{0:11}{1:10}({2:,}/65535)".format("    Stone: ", " ", self.gf_stone),
-        print "\r    Stone: ".format(self.gf_stone),
-        be.set_colour("grey")
-        self.gf_stone=int(raw_input(""))
+    def editCounty(self, cnum):
+        be.cprint("green", "My Lord, What do you desire for county {0}/{1}:\n\n".format(cnum, self.counties))
         be.reset_colour()
+        while True:
+            print "Ruler 0=None, 1=You, 2=Bishop, 3=Baron, 4=Countess,5=Knight: ",
+            be.set_colour("blue")
+            temp=int(raw_input())
+            be.reset_colour()
+            if temp > -1 and temp < 6: 
+                self.county_ruler=temp
+                break
 
-        print "{0:11}{1:10}({2:,}/65535)".format("     Wood: ", " ", self.gf_wood),
-        print "\r     Wood: ".format(self.gf_wood),
-        be.set_colour("green")
-        self.gf_wood=int(raw_input(''))
-        be.reset_colour()
+        while True:
+            print "Color (0=None, 1=Red, 2=Yellow, 3=Grey, 4=Pink, 5=Blue, 6=Black): ",
+            be.set_colour("blue")
+            temp=int(raw_input())
+            be.reset_colour()
+            if temp > -1 and temp < 7: 
+                self.county_color=temp
+                break
 
-        #Weapons
-        print "{0:11}{1:10}({2:,}/65535)".format("    Armor: ", " ", self.gf_armor),
-        print "\r    Armor: ".format(self.gf_armor),
-        be.set_colour("red")
-        self.gf_armor=int(raw_input(''))
-        be.reset_colour()
+        while True:
+            print "Happiness 0-100: ",
+            be.set_colour("blue")
+            temp=int(raw_input())
+            be.reset_colour()
+            if temp > -1 and temp < 101: 
+                self.county_happiness=temp
+                break
+        while True:
+            print "Health (1=Plagued, 2=Weak, 3=Normal, 4=Perfect): ",
+            be.set_colour("green")
+            temp=int(raw_input())
+            be.reset_colour()
+            if temp > -1 and temp < 6: 
+                self.county_health=temp
+                break
+        while True:
+            print "Population 0-65535: ",
+            be.set_colour("blue")
+            temp=int(raw_input())
+            be.reset_colour()
+            if temp > -1 and temp < 65535: 
+                self.county_population=temp
+                break
+        while True:
+            print "Grain (0-65535): ",
+            be.set_colour("yellow")
+            temp=int(raw_input())
+            be.reset_colour()
+            if temp > -1 and temp < 65535: 
+                self.county_grain=temp
+                break
+        while True:
+            print "Cattle (0-65535): ",
+            be.set_colour("white")
+            temp=int(raw_input())
+            be.reset_colour()
+            if temp > -1 and temp < 65535: 
+                self.county_cattle=temp
+                break
 
-        print "{0:11}{1:10}({2:,}/65535)".format("     Bows: ", " ", self.gf_bows),
-        print "\r     Bows: ".format(self.gf_bows),
-        be.set_colour("red")
-        self.gf_bows=int(raw_input(''))
-        be.reset_colour()
+        self.saveCounty(cnum-1)
 
-        print "{0:11}{1:10}({2:,}/65535)".format("Crossbows: ", " ", self.gf_xbows),
-        print "\rCrossbows: ".format(self.gf_xbows),
-        be.set_colour("red")
-        self.gf_xbows=int(raw_input(''))
-        be.reset_colour()
-
-        print "{0:11}{1:10}({2:,}/65535)".format("   Swords: ", " ", self.gf_bows),
-        print "\r   Swords: ".format(self.gf_swords),
-        be.set_colour("red")
-        self.gf_swords=int(raw_input(''))
-        be.reset_colour()
-        
-        self.savevalues(filename)
-
+    def countCounties(self):
+        '''Count the number of counties in gamefile.'''
+        count=0
+        temp=0
+        while True:
+            self.gf.seek(self.start + (768 * count) + 16)
+            temp=struct.unpack('B', self.gf.read(1))[0]
+            if temp != 248:
+                count+=1
+            else:
+                return count
 
     
 #Main
 gamefile=lotr2edit()
-opts, args = getopt.getopt(sys.argv[1:], "hles", ["help", "list","edit","set"])
+opts, args = getopt.getopt(sys.argv[1:], "hf", ["help", "file"])
 if debug: print "Options:", opts
 if debug: print "Args:",args
 for o,a in opts:
@@ -256,25 +215,14 @@ for o,a in opts:
     if o in ("-h", "--help"):
         gamefile.usage()
         sys.exit()
-    elif o in ("-l", "--list"):
+    elif o in ("-f", "--file"):
         if len(args) > 0: 
-            #list
-            gamefile.listfile(args[0])
-            sys.exit()
-    elif o in ("-e", "--edit"):
-        if len(args) > 0: 
-            #edit
-            gamefile.editfile(args[0])
-            sys.exit()
-    elif o in ("-s", "--set"):
-        if len(args) > 0: 
-            #Set good default values into game file
-            gamefile.savevalues(args[0])
-            be.cprint("green", "T'is done my lord...\n")
-            be.reset_colour()
+            if os.path.isfile(args[0]):
+                gamefile.gf=open(args[0],"r+b")
+            gamefile.counties=gamefile.countCounties()
+            gamefile.listCounties()
             sys.exit()
     else:
-        #assume garbage so exit
         be.cprint("red", "ERROR: Unknown, please read the help page")
         be.reset_colour()
         
