@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # Program to edit county information for LOTR2 Save files
-# Nigel Heaney - 20150118
+# Nigel Heaney - 2017
 
 import sys
 import os
@@ -14,7 +14,7 @@ debug=0
 
 class lotr2edit():
     def __init__(self):
-        '''initialise class with defaults/basic information
+        '''class defaults/basic information
         '''
         self.gf=""
         self.county=0
@@ -37,6 +37,7 @@ class lotr2edit():
 
 
     def usage(self):
+        '''Usage screen'''
         be.cprint("green","\nLords of the Realm II - County Game File Editor\n")
         be.cprint("grey","-----------------------------------------------\n\n")
         be.reset_colour()
@@ -87,6 +88,7 @@ class lotr2edit():
 
             
     def listCounties(self):
+        '''Iterate through counties and allow to edit or just view the details of each county'''
         count=1
         while True:
             be.cprint("green", "\nMy Lord, county {0}/{1} reports the following:\n\n".format(count, self.counties))
@@ -129,6 +131,10 @@ class lotr2edit():
                 self.editCounty(count)
 
     def editCounty(self, cnum):
+        '''Allow a county to be edited, any of them so you could reduce the Barons population to 0
+           or give yourself all the food you will need so you only mine and build weapons. Also
+           you could make the population 20000 and make armies larger then 1500 :)
+        '''
         be.cprint("green", "My Lord, What do you desire for county {0}/{1}:\n\n".format(cnum, self.counties))
         be.reset_colour()
         while True:
@@ -208,8 +214,6 @@ class lotr2edit():
 #Main
 gamefile=lotr2edit()
 opts, args = getopt.getopt(sys.argv[1:], "hf", ["help", "file"])
-if debug: print "Options:", opts
-if debug: print "Args:",args
 for o,a in opts:
     if debug: print "O:", o
     if o in ("-h", "--help"):

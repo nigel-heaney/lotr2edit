@@ -1,7 +1,6 @@
 Start of counties = 15449  (2nd 15749) (768 Bytes
-End = 16f30?
 
-County=767 Bytes
+County=768 Bytes
 {
 	Bytes  	Purpose
 4	1-4		Ignored
@@ -48,7 +47,7 @@ Frozia
 Hlastseason    = 16355
 1623  -> 57 06 = 1636c
 2880  -> 40 0b = 1656c (Grain)
-ealth
+
 Eckles
 1700    -> A4 06 = 1606C
 2526 Gr -> DE 09 = 1626c
@@ -62,7 +61,7 @@ Carefield
 442 Gr  -> Ba 01 = 15c6c
 
 Bloom County
-healthiness    = 15751  (8bit, 1 plague, 2 weak, 3 normal,4 perfect)
+healthiness    = 15751  (8bit, 1 plagued, 2 weak, 3 normal,4 perfect)
 1397  -> 75 05 = 1576c
 1561  -> 19 06 = 1596c
 
