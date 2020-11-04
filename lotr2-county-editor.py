@@ -34,7 +34,7 @@ class lotr2edit():
         self.healthc=["Null","Red","yellow","green","lgreen"]
         self.rulers=["No Ruler", "You M'Lord", "The Bishop", "The Baron", "The Countess", "The Knight"]
         self.start=0x15449
-
+        self.countyloc=0x402F8
 
     def usage(self):
         '''Usage screen'''
@@ -51,7 +51,7 @@ class lotr2edit():
         self.gf.seek(self.start + (768 * cnum) + 6)
         self.county_color=struct.unpack('B', self.gf.read(1))[0]
         self.gf.seek(self.start + (768 * cnum) + 8)
-        self.county_health=struct.unpack('B', self.gf.read(1))[0]
+        self.county_health=int(struct.unpack('B', self.gf.read(1))[0])
         self.gf.seek(self.start + (768 * cnum) + 11)
         self.county_happiness=struct.unpack('B', self.gf.read(1))[0]
         self.gf.seek(self.start + (768 * cnum) + 35)
@@ -104,7 +104,7 @@ class lotr2edit():
             be.cprint("red", "{0:}\n".format(self.county_happiness))
             be.reset_colour()
             print "Health: ",
-            be.cprint(self.healthc[self.county_health], "{0:}\n".format(self.health[self.county_health]))
+            be.cprint("red", "{0:}\n".format(self.health[self.county_health]))
             be.reset_colour()
             print "Population: ",
             be.cprint("white", "{0:}\n".format(self.county_population))
@@ -131,9 +131,7 @@ class lotr2edit():
                 self.editCounty(count)
 
     def editCounty(self, cnum):
-        '''Allow a county to be edited, any of them so you could reduce the Barons population to 0
-           or give yourself all the food you will need so you only mine and build weapons. Also
-           you could make the population 20000 and make armies larger then 1500 :)
+        ''' Edit main stats of a county - population, health, grain, cattle
         '''
         be.cprint("green", "My Lord, What do you desire for county {0}/{1}:\n\n".format(cnum, self.counties))
         be.reset_colour()
@@ -198,17 +196,13 @@ class lotr2edit():
 
         self.saveCounty(cnum-1)
 
+
     def countCounties(self):
         '''Count the number of counties in gamefile.'''
         count=0
         temp=0
-        while True:
-            self.gf.seek(self.start + (768 * count) + 16)
-            temp=struct.unpack('B', self.gf.read(1))[0]
-            if temp != 248:
-                count+=1
-            else:
-                return count
+        self.gf.seek(self.countyloc)
+        return struct.unpack('B', self.gf.read(1))[0]
 
     
 #Main
